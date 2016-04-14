@@ -1,6 +1,4 @@
-export const BoardConstants = {
-	BOARD_PADDING  : 200,
-	BOARD_SIZE : 7,
-	FINISH_SIZE : 4,
-	PIECE_SIZE : 80
-};
+export const BOARD_PADDING  = 200;
+export const BOARD_SIZE = 7;
+export const FINISH_SIZE = 4;
+export const PIECE_SIZE = 80;

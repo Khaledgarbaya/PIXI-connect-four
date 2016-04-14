@@ -7,7 +7,7 @@
     "buildDir": "./build",
     "stageWidth": 800,
     "stageHeight": 600,
-    "BackgroundColor" : "0x4D4DD1"
+    "BackgroundColor" : "0x0083cd"
   },
   "scripts": {
     "prestart": "npm install",
@@ -16,7 +16,7 @@
     "build": "NODE_ENV=production npm run webpack",
     "prewebpack": "npm run clean",
     "clean": "rimraf $npm_package_config_buildDir && mkdir $npm_package_config_buildDir",
-    "lint": "eslint ./app/**/*.js",
+    "lint": "eslint ./app/**/*.js"
   },
   "dependencies": {
     "pixi.js": "^3.0.7",
