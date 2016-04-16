@@ -18,15 +18,12 @@ export default class Renderer extends PIXI.WebGLRenderer {
 
     super(...args);
 
-    window.addEventListener('resize', this.resizeHandler.bind(this));
-
     RendererStore.set('resolution', this.resolution);
     RendererStore.set('stageWidth', args[0]);
     RendererStore.set('stageHeight', args[1]);
     RendererStore.set('stageCenter', new PIXI.Point(args[0] / 2, args[1] / 2));
     this.setStore();
 
-    this.resizeHandler();
   }
   /**
   * set the default clear 

@@ -1,11 +1,14 @@
 import EventEmitter from 'events';
-import { NEW_GAME } from '../constants/GameConstants';
+import {
+  NEW_GAME
+}
+from '../constants/GameConstants';
 
 class GameStore extends EventEmitter {
-	constructor(...args) {
-		super(...args);
-		this.data = {};
-	}
+  constructor(...args) {
+    super(...args);
+    this.data = {};
+  }
   get(key) {
     return this.data[key];
   }

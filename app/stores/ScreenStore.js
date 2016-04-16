@@ -1,15 +1,15 @@
 import EventEmitter from 'events';
 import {
-  PLAY, RED_TURN, YELLOW_TURN
+  CHANGE_SCREEN
 }
-from '../constants/GameConstants';
+from '../constants/AppConstants';
 
-class GameStateStore extends EventEmitter {
+class ScreenStore extends EventEmitter {
   constructor(...args) {
     super(...args);
     this.data = {
-      type: 1,
-      col: 0
+      previousScreen: null,
+      nextScreen: null
     };
   }
   get(key) {
@@ -21,11 +21,11 @@ class GameStateStore extends EventEmitter {
   }
 
   emitChange() {
-    this.emit(PLAY, this.data);
+    this.emit(CHANGE_SCREEN, this.data);
   }
 
   addChangeListener(callback) {
-    this.on(PLAY, callback, this.data);
+    this.on(CHANGE_SCREEN, callback, this.data);
   }
 }
-export default new GameStateStore();
+export default new ScreenStore();

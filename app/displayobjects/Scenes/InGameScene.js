@@ -1,9 +1,9 @@
 import PIXI from 'pixi.js';
 
-import greenIMG from '../../img/green.png';
-import redIMG from '../../img/red.png';
-import yellowIMG from '../../img/yellow.png';
-import emptyIMG from '../../img/empty.png';
+const greenIMG = '../img/green.png';
+const redIMG = '../img/red.png';
+const yellowIMG = '../img/yellow.png';
+const emptyIMG = '../img/empty.png';
 import {
 	BOARD_PADDING, BOARD_SIZE, FINISH_SIZE, PIECE_SIZE
 }
@@ -17,12 +17,11 @@ import GameStore from '../../stores/GameStore';
 import AnimationStore from '../../stores/AnimationStore';
 
 
-const Container = PIXI.Container;
 const Sprite = PIXI.Sprite;
 const Texture = PIXI.Texture;
 const animOffset = 20;
 let animPosition = 0;
-export default class BoardContainer extends PIXI.Container {
+export default class InGameScene extends Sprite {
 	constructor(board) {
 		super();
 		this.board = board;
@@ -34,7 +33,6 @@ export default class BoardContainer extends PIXI.Container {
 		this.animatePiece();
 	}
 	onGameStateChangeHandler() {
-		console.log("playing at col ", GameStateStore.get("col"), " with value ", GameStateStore.get("type"));
 		this.board.playAtColWithValue(GameStateStore.get("col"), GameStateStore.get("type"));
 	}
 	onPieceMouseDown(e) {
@@ -45,7 +43,6 @@ export default class BoardContainer extends PIXI.Container {
 		const {
 			isAnimating, result
 		} = this.board;
-		console.log(result, playingNow, isAnimating);
 		if (result) {
 			return;
 		}
@@ -108,7 +105,6 @@ export default class BoardContainer extends PIXI.Container {
 		if (!isAnimating || animatedPiece === null) {
 			return;
 		}
-		console.log("animatedPiece ", animatedPiece);
 		let pieceSprite = this.getChildByName(animatedPiece.name);
 		const texture = this.getTextureByValue(animatedPiece.value);
 
@@ -133,17 +129,15 @@ export default class BoardContainer extends PIXI.Container {
 		if (animPosition > pieceSprite.movingDirection.to.y) {
 			delete pieceSprite.movingDirection;
 			this.board.isAnimating = false;
-
-			if (this.board.gameHasFinished(animatedPiece.value)) {
-				this.renderNewGame(this.board);
-				this.renderPIXIBoard(this.board);
-				return;
-			}
-
 			// allow next player to play
 			playingNow = playingNow === RED_TURN ? YELLOW_TURN : RED_TURN;
 			GameStateStore.set("type", playingNow);
-			console.log("Next turn for ", playingNow);
+
+			if (this.board.gameHasFinished(animatedPiece.value)) {
+				this.renderNewGame(this.board);
+				return;
+			}
+
 
 			if (playingNow === YELLOW_TURN && !this.board.result) {
 				this.playWithYellow(this.board);
@@ -157,13 +151,14 @@ export default class BoardContainer extends PIXI.Container {
 		animPosition += animOffset;
 	}
 	renderNewGame(board) {
-		GameStore.emitChange();
+		this.reset();
 	}
 	reset() {
+		AnimationStore.removeListener("PLAY", this.onAnimationChangeHandler);
+
 		setTimeout(() => {
-			this.removeChildren();
-			this.board.initiate();
-			this.renderPIXIBoard(this.board);
+			GameStateStore.set("type", RED_TURN);
+			GameStore.emitChange();
 		}, 500);
 	}
 	renderPIXIBoardBackground(board) {

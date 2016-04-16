@@ -1,6 +1,9 @@
 # Pixi Connect Four Game
 
-Webpack with ES6 provides a more class based approach to Pixi.js development and allows you to include assets within your JS.
+## Intorduction
+
+Some assets are used downloaded from this link http://graphicburger.com/mobile-game-gui/
+Use for business may require a license
 
 ## Getting started
 
@@ -9,8 +12,8 @@ You can configure some app settings in package.json
 ```json
 "config": {
   "buildDir": "./build",
-  "stageWidth": 1920,
-  "stageHeight": 1080
+  "stageWidth": 1024,
+  "stageHeight": 768
 }
 ```
 ## npm scripts

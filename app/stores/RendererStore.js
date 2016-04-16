@@ -1,5 +1,8 @@
 import EventEmitter from 'events';
-import { RESIZE } from '../constants/AppConstants';
+import {
+  RESIZE
+}
+from '../constants/AppConstants';
 
 /**
  * Render Store
@@ -23,7 +26,10 @@ class RendererStore extends EventEmitter {
       height: 0,
       stageWidth: 0,
       stageHeight: 0,
-      stageCenter: {x: 0,y: 0},
+      stageCenter: {
+        x: 0,
+        y: 0
+      },
       resolution: 1
     };
   }

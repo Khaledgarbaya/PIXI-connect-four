@@ -1,31 +1,57 @@
-import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
-import BoardContainer from '../Board/BoardContainer.js';
+import PIXI from 'pixi.js';
+import InGameScene from '../Scenes/InGameScene.js';
+import HomeScene from '../Scenes/HomeScene.js';
 import Board from '../../model/Board.js';
 import GameStore from '../../stores/GameStore';
+import ScreenStore from '../../stores/ScreenStore';
+import RendererStore from '../../stores/RendererStore';
+
 /**
  * Main App Display Object
  *
  *
  * @exports App
- * @extends ScaledContainer
+ * @extends PIXI.Container
  */
-export default class App extends ScaledContainer {
 
-  constructor(...args) {
-    super(...args);
+let assets = [];
+export default class App extends PIXI.Container {
 
-    this.addBoard();
+  constructor(config) {
+    super(config.stageWidth, config.stageHeight);
+    assets = config.assets;
+    this.preloadAssets();
     GameStore.addChangeListener(this.newGameHandler.bind(this));
+    ScreenStore.addChangeListener(this.ChangeScreenHandler.bind(this));
+  }
+  preloadAssets() {
+    let loader = new PIXI.loaders.Loader();
+    assets.forEach(item => loader.add(item, item));
+    loader.once("complete", this.onAssetsLoaded.bind(this));
+    loader.load();
+  }
+  onAssetsLoaded() {
+    ScreenStore.set("nextScreen", new HomeScene());
+    ScreenStore.emitChange();
+  }
+  ChangeScreenHandler() {
+    if (this.currentScreen != null) {
+      this.removeChild(this.currentScreen);
+    }
+    this.currentScreen = ScreenStore.get("nextScreen");
+    this.addChild(this.currentScreen);
+    this.centerElement(this.currentScreen);
+  }
+  newGameHandler() {
+    ScreenStore.set("nextScreen", new HomeScene());
+    ScreenStore.emitChange();
   }
 
-  addBoard(){
-  	const boardModel = new Board();
-  	this.boardContainer = new BoardContainer(boardModel);
-  	this.addChild(this.boardContainer);
-  }
-
-  newGameHandler(){
-	this.boardContainer.reset();
+  centerElement(displayObject) {
+    displayObject.anchor.set(0.5, 0.5);
+    const stageCenter = RendererStore.get("stageCenter");
+    displayObject.x = stageCenter.x / 2;
+    displayObject.y = stageCenter.y / 2;
   }
 
 }
