@@ -4,49 +4,61 @@ import greenIMG from '../../img/green.png';
 import redIMG from '../../img/red.png';
 import yellowIMG from '../../img/yellow.png';
 import emptyIMG from '../../img/empty.png';
-import {BOARD_PADDING, BOARD_SIZE, FINISH_SIZE, PIECE_SIZE} from "../../constants/BoardConstants";
+import {
+	BOARD_PADDING, BOARD_SIZE, FINISH_SIZE, PIECE_SIZE
+}
+from "../../constants/BoardConstants";
+import {
+	NEW_GAME, PLAY_WITH_RED, PLAY_WITH_YELLOW, RED_TURN, YELLOW_TURN
+}
+from '../../constants/GameConstants';
+import GameStateStore from '../../stores/GameStateStore';
+import GameStore from '../../stores/GameStore';
+import AnimationStore from '../../stores/AnimationStore';
 
 
 const Container = PIXI.Container;
 const Sprite = PIXI.Sprite;
 const Texture = PIXI.Texture;
-
+const animOffset = 20;
+let animPosition = 0;
 export default class BoardContainer extends PIXI.Container {
 	constructor(board) {
 		super();
-		console.log(BOARD_SIZE);
+		this.board = board;
 		this.renderPIXIBoard(board);
+		GameStateStore.addChangeListener(this.onGameStateChangeHandler.bind(this));
+		AnimationStore.addChangeListener(this.onAnimationChangeHandler.bind(this));
+	}
+	onAnimationChangeHandler() {
+		this.animatePiece();
+	}
+	onGameStateChangeHandler() {
+		console.log("playing at col ", GameStateStore.get("col"), " with value ", GameStateStore.get("type"));
+		this.board.playAtColWithValue(GameStateStore.get("col"), GameStateStore.get("type"));
 	}
 	onPieceMouseDown(e) {
-		const {
-			connect4
-		} = this.props;
-		const {
-			board
-		} = connect4;
+		let playingNow = GameStateStore.get("type");
 		const {
 			target
 		} = e;
 		const {
 			isAnimating, result
-		} = board;
-		const {
-			playingNow
-		} = connect4;
-
+		} = this.board;
+		console.log(result, playingNow, isAnimating);
 		if (result) {
 			return;
 		}
-
 		if (playingNow !== RED_TURN || isAnimating) {
 			return;
 		}
 
-		if (!board.canPlayAt(target.col)) {
+		if (!this.board.canPlayAt(target.col)) {
 			return;
 		}
-
-		this.props.dispatch(playWithRed(target.col));
+		GameStateStore.set("type", RED_TURN);
+		GameStateStore.set("col", target.col);
+		GameStateStore.emitChange();
 	}
 
 	getTextureByValue(type) {
@@ -80,25 +92,23 @@ export default class BoardContainer extends PIXI.Container {
 				return;
 			}
 
-			this.props.dispatch(playWithYellow(col));
+			GameStateStore.set("type", YELLOW_TURN);
+			GameStateStore.set("col", col);
+			GameStateStore.emitChange();
 		}, 500);
 	}
 
 	animatePiece() {
-		const {
-			connect4
-		} = this.props;
-		const {
-			board, playingNow
-		} = connect4;
+		let playingNow = GameStateStore.get("type");
+
 		const {
 			animatedPiece, isAnimating
-		} = board;
+		} = this.board;
 
 		if (!isAnimating || animatedPiece === null) {
 			return;
 		}
-
+		console.log("animatedPiece ", animatedPiece);
 		let pieceSprite = this.getChildByName(animatedPiece.name);
 		const texture = this.getTextureByValue(animatedPiece.value);
 
@@ -122,17 +132,21 @@ export default class BoardContainer extends PIXI.Container {
 
 		if (animPosition > pieceSprite.movingDirection.to.y) {
 			delete pieceSprite.movingDirection;
-			board.isAnimating = false;
+			this.board.isAnimating = false;
 
-			if (board.gameHasFinished(animatedPiece.value)) {
-				this.renderNewGame(board);
-				this.renderPIXIBoard(connect4);
-				this.renderScore(connect4);
+			if (this.board.gameHasFinished(animatedPiece.value)) {
+				this.renderNewGame(this.board);
+				this.renderPIXIBoard(this.board);
 				return;
 			}
 
-			if (playingNow === YELLOW_TURN && !board.result) {
-				this.playWithYellow(board);
+			// allow next player to play
+			playingNow = playingNow === RED_TURN ? YELLOW_TURN : RED_TURN;
+			GameStateStore.set("type", playingNow);
+			console.log("Next turn for ", playingNow);
+
+			if (playingNow === YELLOW_TURN && !this.board.result) {
+				this.playWithYellow(this.board);
 			}
 			return;
 		}
@@ -142,58 +156,67 @@ export default class BoardContainer extends PIXI.Container {
 
 		animPosition += animOffset;
 	}
+	renderNewGame(board) {
+		GameStore.emitChange();
+	}
+	reset() {
+		setTimeout(() => {
+			this.removeChildren();
+			this.board.initiate();
+			this.renderPIXIBoard(this.board);
+		}, 500);
+	}
 	renderPIXIBoardBackground(board) {
-    for (let row = 0; row < BOARD_SIZE; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-      	console.log("rendering col -> ", col, " row -> ", row);
-        const piece = board.getPieceAt(row, col);
-        let texture = this.getTextureByValue(0);
-        let pieceSprite = new Sprite(texture);
-        pieceSprite.x = piece.x;
-        pieceSprite.y = piece.y;
-        pieceSprite.row = row;
-        pieceSprite.col = col;
-        pieceSprite.name = "empty" + col + "-" + row;
-        pieceSprite.interactive = true;
-        pieceSprite.visible = true;
-        pieceSprite.mousedown = (e) => {
-          this.onPieceMouseDown(e);
-        };
-        this.addChild(pieceSprite);
-      }
-    }
-  }
-renderPIXIBoard(board) {
-	this.renderPIXIBoardBackground(board);
-    for (let row = 0; row < BOARD_SIZE; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        const piece = board.getPieceAt(row, col);
-        const pieceValue = piece.value;
+		for (let row = 0; row < BOARD_SIZE; row++) {
+			for (let col = 0; col < BOARD_SIZE; col++) {
+				const piece = board.getPieceAt(row, col);
+				let texture = this.getTextureByValue(0);
+				let pieceSprite = new Sprite(texture);
+				pieceSprite.x = piece.x;
+				pieceSprite.y = piece.y;
+				pieceSprite.row = row;
+				pieceSprite.col = col;
+				pieceSprite.name = "empty" + col + "-" + row;
+				pieceSprite.interactive = true;
+				pieceSprite.visible = true;
+				pieceSprite.mousedown = (e) => {
+					this.onPieceMouseDown(e);
+				};
+				this.addChild(pieceSprite);
+			}
+		}
+	}
+	renderPIXIBoard(board) {
+		this.renderPIXIBoardBackground(board);
+		for (let row = 0; row < BOARD_SIZE; row++) {
+			for (let col = 0; col < BOARD_SIZE; col++) {
+				const piece = board.getPieceAt(row, col);
+				const pieceValue = piece.value;
 
-        let texture = this.getTextureByValue(pieceValue);
-        if (board.isAnimatedPiece(row, col)) {
-          texture = this.getTextureByValue(0);
-        }
-        if (texture === emptyIMG) {
-          continue;
-        }
-        let pieceSprite = this.getChildByName(piece.name);
-        if (pieceSprite !== null) {
-          this.removeChild(pieceSprite);
-        }
-        pieceSprite = new Sprite(texture);
-        pieceSprite.x = piece.x;
-        pieceSprite.y = piece.y;
-        pieceSprite.row = row;
-        pieceSprite.col = col;
-        pieceSprite.name = piece.name;
-        pieceSprite.interactive = true;
-        pieceSprite.visible = true;
-        pieceSprite.mousedown = (e) => {
-          this.onPieceMouseDown(e);
-        };
-        this.addChild(pieceSprite);
-      }
-    }
-  }
+				let texture = this.getTextureByValue(pieceValue);
+				if (board.isAnimatedPiece(row, col)) {
+					texture = this.getTextureByValue(0);
+				}
+				if (texture === emptyIMG) {
+					continue;
+				}
+				let pieceSprite = this.getChildByName(piece.name);
+				if (pieceSprite !== null) {
+					this.removeChild(pieceSprite);
+				}
+				pieceSprite = new Sprite(texture);
+				pieceSprite.x = piece.x;
+				pieceSprite.y = piece.y;
+				pieceSprite.row = row;
+				pieceSprite.col = col;
+				pieceSprite.name = piece.name;
+				pieceSprite.interactive = true;
+				pieceSprite.visible = true;
+				pieceSprite.mousedown = (e) => {
+					this.onPieceMouseDown(e);
+				};
+				this.addChild(pieceSprite);
+			}
+		}
+	}
 }

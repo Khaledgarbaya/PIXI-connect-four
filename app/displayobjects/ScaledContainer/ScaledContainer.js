@@ -3,8 +3,8 @@ import RendererStore from '../../stores/RendererStore.js';
 import { RESIZE } from '../../constants/AppConstants.js';
 
 // default target size
-let tw = 800;
-let th = 600;
+let tw = 1024;
+let th = 768;
 
 /**
  * ScaledContainer
