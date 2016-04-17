@@ -6,7 +6,7 @@ import redIMG from '../img/red.png';
 import yellowIMG from '../img/yellow.png';
 
 class Assets{
-	constructor() {
+	constructor () {
 		this.assetList = [];
 		this.assetList.push({name: 'empty', fullPath: emptyIMG});
 		this.assetList.push({name: 'green', fullPath: greenIMG});

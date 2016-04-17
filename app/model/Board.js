@@ -5,15 +5,15 @@ from "../constants/BoardConstants";
 
 export default class Board {
 
-  constructor() {
+  constructor () {
     this.initiate();
   }
 
-  getRelativePosition(val) {
+  getRelativePosition (val) {
     return BOARD_PADDING / 2 + val * PIECE_SIZE;
   }
 
-  initiate() {
+  initiate () {
     this.pieces = {};
     this.result = null;
     this.animatedPiece = null;
@@ -35,11 +35,11 @@ export default class Board {
     }
   }
 
-  getPieceAt(row, col) {
+  getPieceAt (row, col) {
     return this.pieces[`${row}${col}`];
   }
 
-  canPlayAt(col) {
+  canPlayAt (col) {
     for (let row = 0; row < BOARD_SIZE; row++) {
       const pos = `${row}${col}`;
 
@@ -53,7 +53,7 @@ export default class Board {
     return false;
   }
 
-  playAtColWithValue(col, value) {
+  playAtColWithValue (col, value) {
     this.isAnimating = true;
 
     for (let row = 0; row < BOARD_SIZE; row++) {
@@ -87,13 +87,13 @@ export default class Board {
     }
   }
 
-  isAnimatedPiece(row, col) {
+  isAnimatedPiece (row, col) {
     return this.isAnimating &&
       this.animatedPiece.row === row &&
       this.animatedPiece.col === col;
   }
 
-  gameHasFinishedHorizontally(x, y, value) {
+  gameHasFinishedHorizontally (x, y, value) {
     const result = [];
 
     for (let col = y; col < BOARD_SIZE; col++) {
@@ -117,7 +117,7 @@ export default class Board {
     return null;
   }
 
-  gameHasFinishedVertically(x, y, value) {
+  gameHasFinishedVertically (x, y, value) {
     const result = [];
 
     for (let row = x; row < BOARD_SIZE; row++) {
@@ -141,7 +141,7 @@ export default class Board {
     return null;
   }
 
-  gameHasFinishedDiagonallyAsc(x, y, value) {
+  gameHasFinishedDiagonallyAsc (x, y, value) {
     const result = [];
     let row = x;
     let col = y;
@@ -170,7 +170,7 @@ export default class Board {
     return null;
   }
 
-  gameHasFinishedDiagonallyDesc(x, y, value) {
+  gameHasFinishedDiagonallyDesc (x, y, value) {
     const result = [];
     let row = x;
     let col = y;
@@ -199,7 +199,7 @@ export default class Board {
     return null;
   }
 
-  gameHasFinished(value) {
+  gameHasFinished (value) {
     let game;
 
     for (let row = 0; row < BOARD_SIZE; row++) {
@@ -242,7 +242,7 @@ export default class Board {
     return false;
   }
 
-  updateResults(game, type) {
+  updateResults (game, type) {
     game.forEach(item => {
       const {
         row, col

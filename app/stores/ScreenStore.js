@@ -5,26 +5,26 @@ import {
 from '../constants/AppConstants';
 
 class ScreenStore extends EventEmitter {
-  constructor(...args) {
+  constructor (...args) {
     super(...args);
     this.data = {
       previousScreen: null,
       nextScreen: null
     };
   }
-  get(key) {
+  get (key) {
     return this.data[key];
   }
 
-  set(key, value) {
+  set (key, value) {
     return this.data[key] = value;
   }
 
-  emitChange() {
+  emitChange () {
     this.emit(CHANGE_SCREEN, this.data);
   }
 
-  addChangeListener(callback) {
+  addChangeListener (callback) {
     this.on(CHANGE_SCREEN, callback, this.data);
   }
 }

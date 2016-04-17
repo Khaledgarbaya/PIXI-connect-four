@@ -17,7 +17,7 @@ from '../constants/AppConstants';
  */
 class RendererStore extends EventEmitter {
 
-  constructor(...args) {
+  constructor (...args) {
     super(...args);
 
     this.data = {
@@ -34,19 +34,19 @@ class RendererStore extends EventEmitter {
     };
   }
 
-  get(key) {
+  get (key) {
     return this.data[key];
   }
 
-  set(key, value) {
+  set (key, value) {
     return this.data[key] = value;
   }
 
-  emitChange() {
+  emitChange () {
     this.emit(RESIZE, this.data);
   }
 
-  addChangeListener(callback) {
+  addChangeListener (callback) {
     this.on(RESIZE, callback, this.data);
   }
 }

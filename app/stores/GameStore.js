@@ -5,23 +5,23 @@ import {
 from '../constants/GameConstants';
 
 class GameStore extends EventEmitter {
-  constructor(...args) {
+  constructor (...args) {
     super(...args);
     this.data = {};
   }
-  get(key) {
+  get (key) {
     return this.data[key];
   }
 
-  set(key, value) {
+  set (key, value) {
     return this.data[key] = value;
   }
 
-  emitChange() {
+  emitChange () {
     this.emit(NEW_GAME, this.data);
   }
 
-  addChangeListener(callback) {
+  addChangeListener (callback) {
     this.on(NEW_GAME, callback, this.data);
   }
 }

@@ -17,7 +17,7 @@ from '../constants/AppConstants';
  */
 class AnimationStore extends EventEmitter {
 
-  constructor(...args) {
+  constructor (...args) {
     super(...args);
 
     this.data = {
@@ -32,21 +32,21 @@ class AnimationStore extends EventEmitter {
     this.setMaxListeners(1000); // a lot of objects might need updating
   }
 
-  get(key) {
+  get (key) {
     return this.data[key];
   }
 
-  set(key, value) {
+  set (key, value) {
     return this.data[key] = value;
   }
 
-  emitChange() {
+  emitChange () {
     this.data.tick++;
     this.data.currentTime = window.performance.now();
     this.emit(ANIMATE, this.data);
   }
 
-  addChangeListener(callback) {
+  addChangeListener (callback) {
     this.on(ANIMATE, callback, this.data);
   }
 }

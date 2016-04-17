@@ -2,7 +2,7 @@ import PIXI from 'pixi.js';
 import RendererStore from '../stores/RendererStore';
 import AnimationStore from '../stores/AnimationStore';
 
-let renderables = new Set();
+const renderables = new Set();
 
 /**
  * GL Renderer with hooks into a Store
@@ -14,26 +14,26 @@ let renderables = new Set();
  */
 export default class Renderer extends PIXI.WebGLRenderer {
 
-  constructor(...args) {
+  constructor (...args) {
 
-    super(...args);
+      super(...args);
 
-    RendererStore.set('resolution', this.resolution);
-    RendererStore.set('stageWidth', args[0]);
-    RendererStore.set('stageHeight', args[1]);
-    RendererStore.set('stageCenter', new PIXI.Point(args[0] / 2, args[1] / 2));
-    this.setStore();
-  }
-  /**
-  * set the default clear 
-  */
-  setClearColor(color){
-    this.backgroundColor = color;
-  }
-  /**
-   * Set the stores width and height on resize
-   */
-  setStore() {
+      RendererStore.set('resolution', this.resolution);
+      RendererStore.set('stageWidth', args[0]);
+      RendererStore.set('stageHeight', args[1]);
+      RendererStore.set('stageCenter', new PIXI.Point(args[0] / 2, args[1] / 2));
+      this.setStore();
+    }
+    /**
+     * set the default clear 
+     */
+  setClearColor (color) {
+      this.backgroundColor = color;
+    }
+    /**
+     * Set the stores width and height on resize
+     */
+  setStore () {
     RendererStore.set('width', this.getWindowSize()[0]);
     RendererStore.set('height', this.getWindowSize()[1]);
   }
@@ -42,7 +42,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Sets's store and emits Change
    * @return {null}
    */
-  resizeHandler() {
+  resizeHandler () {
     this.resize(...this.getWindowSize());
     this.setStore();
     RendererStore.emitChange();
@@ -52,7 +52,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Get the current window size
    * @return {null}
    */
-  getWindowSize() {
+  getWindowSize () {
     var width = window.innerWidth;
     var height = window.innerHeight;
 
@@ -63,7 +63,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Start the animation loop
    * @return {null}
    */
-  start() {
+  start () {
     this.active = true;
     window.requestAnimationFrame(this.animate.bind(this));
   }
@@ -72,7 +72,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Stop the animation loop
    * @return {null}
    */
-  stop() {
+  stop () {
     this.active = false;
   }
 
@@ -80,10 +80,10 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Main animation loop, updates animation store
    * @return {null}
    */
-  animate() {
+  animate () {
     this.renderRenderables();
 
-    if(this.active) {
+    if (this.active) {
       window.requestAnimationFrame(this.animate.bind(this));
       AnimationStore.emitChange();
     }
@@ -94,7 +94,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * @param {renderable} renderable object
    * @returns {renderable}
    */
-  addRenderable(renderable) {
+  addRenderable (renderable) {
     return renderables.add(renderable);
   }
 
@@ -103,10 +103,10 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * @param {renderable} renderable object
    * @returns {renderable}
    */
-  removeRenderable(renderable) {
+  removeRenderable (renderable) {
     let hasRenderable = renderables.has(renderable);
 
-    if(hasRenderable) {
+    if (hasRenderable) {
       renderables.delete(renderable);
     }
 
@@ -117,7 +117,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
    * Loop over renderables and call the render function on them
    * @return {null}
    */
-  renderRenderables() {
+  renderRenderables () {
     for (let entry of renderables) {
       this.render(entry);
     }
