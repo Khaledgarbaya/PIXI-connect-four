@@ -8,12 +8,6 @@
     "stageWidth": 1024,
     "stageHeight": 768,
     "BackgroundColor" : "0x0083cd",
-    "assets" : ["../img/empty.png", 
-                "../img/green.png", 
-                "../img/yellow.png", 
-                "../img/red.png", 
-                "../img/playBtn.png",
-                "../img/panel.png"],
     "texts":{"panel_title":"CONNECT 4",
               "panel_desc":"Use your mouse to put red pieces into the board.\nYour goal is to get four of them in a row \nvertically, horizontally or diagonally.",
             "playBtn":"Let's Go"}

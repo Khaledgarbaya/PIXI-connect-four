@@ -23,7 +23,6 @@ export default class Renderer extends PIXI.WebGLRenderer {
     RendererStore.set('stageHeight', args[1]);
     RendererStore.set('stageCenter', new PIXI.Point(args[0] / 2, args[1] / 2));
     this.setStore();
-
   }
   /**
   * set the default clear 

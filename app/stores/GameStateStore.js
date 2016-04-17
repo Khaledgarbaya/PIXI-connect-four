@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 import {
-  PLAY, RED_TURN, YELLOW_TURN
+  PLAY
 }
 from '../constants/GameConstants';
 
