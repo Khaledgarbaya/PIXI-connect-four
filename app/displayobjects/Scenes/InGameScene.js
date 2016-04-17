@@ -9,9 +9,14 @@ import {
 }
 from "../../constants/BoardConstants";
 import {
-	NEW_GAME, PLAY_WITH_RED, PLAY_WITH_YELLOW, RED_TURN, YELLOW_TURN
+	NEW_GAME, PLAY_WITH_RED, PLAY_WITH_YELLOW, RED_TURN, YELLOW_TURN, PLAY
 }
 from '../../constants/GameConstants';
+import {
+	ANIMATE
+}
+from '../../constants/AppConstants';
+
 import GameStateStore from '../../stores/GameStateStore';
 import GameStore from '../../stores/GameStore';
 import AnimationStore from '../../stores/AnimationStore';
@@ -25,9 +30,15 @@ export default class InGameScene extends Sprite {
 	constructor(board) {
 		super();
 		this.board = board;
+
+		/// hold references to the bounded callbacks will need the exact listener to be able to remove it later
+		this.boundAnimationListener = this.onAnimationChangeHandler.bind(this);
+		this.boundGameStateListener = this.onGameStateChangeHandler.bind(this);
+
 		this.renderPIXIBoard(board);
-		GameStateStore.addChangeListener(this.onGameStateChangeHandler.bind(this));
-		AnimationStore.addChangeListener(this.onAnimationChangeHandler.bind(this));
+		GameStateStore.set("type", RED_TURN);
+		GameStateStore.addChangeListener(this.boundGameStateListener);
+		AnimationStore.addChangeListener(this.boundAnimationListener);
 	}
 	onAnimationChangeHandler() {
 		this.animatePiece();
@@ -154,12 +165,9 @@ export default class InGameScene extends Sprite {
 		this.reset();
 	}
 	reset() {
-		// console.log(EventEmitter.listenerCount(AnimationStore, 'PLAY'));
-		// AnimationStore.removeListener("PLAY", this.onAnimationChangeHandler.bind(this));
-		// console.log(EventEmitter.listenerCount(AnimationStore, 'PLAY'));
 		setTimeout(() => {
-			//GameStateStore.set("type", RED_TURN);
-			this.renderPIXIBoard();
+			GameStateStore.removeListener(PLAY, this.boundGameStateListener);
+			AnimationStore.removeListener(ANIMATE, this.boundAnimationListener);
 			GameStore.emitChange();
 		}, 500);
 	}
