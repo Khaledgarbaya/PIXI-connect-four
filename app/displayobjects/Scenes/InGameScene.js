@@ -38,7 +38,7 @@ export default class InGameScene extends Sprite {
 		/// hold references to the bounded callbacks will need the exact listener to be able to remove it later
 		this.boundAnimationListener = this.onAnimationChangeHandler.bind(this);
 		this.boundGameStateListener = this.onGameStateChangeHandler.bind(this);
-
+		this.renderPIXIBoardBackground(board);
 		this.renderPIXIBoard(board);
 		GameStateStore.set("type", RED_TURN);
 		GameStateStore.addChangeListener(this.boundGameStateListener);
@@ -166,6 +166,7 @@ export default class InGameScene extends Sprite {
 		animPosition += animOffset;
 	}
 	renderNewGame(board) {
+		this.renderPIXIBoard(board);
 		const playingNow = GameStateStore.get('type');
 		let playerNameValue = 'You';
 		if(playingNow !== RED_TURN){
@@ -174,7 +175,7 @@ export default class InGameScene extends Sprite {
 
 		const text = config.texts.result_text.replace("{playerName}", playerNameValue);
 		const resultText = new PIXI.Text(text, {
-			font: 'bold 62px Arial',
+			font: 'bold 82px Arial',
 			fill: 0xffffff,
 			align: 'center',
 			dropShadow: true,
@@ -213,7 +214,6 @@ export default class InGameScene extends Sprite {
 		}
 	}
 	renderPIXIBoard(board) {
-		this.renderPIXIBoardBackground(board);
 		for (let row = 0; row < BOARD_SIZE; row++) {
 			for (let col = 0; col < BOARD_SIZE; col++) {
 				const piece = board.getPieceAt(row, col);
