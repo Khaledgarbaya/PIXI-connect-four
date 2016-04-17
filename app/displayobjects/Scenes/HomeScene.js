@@ -5,8 +5,8 @@ import ScreenStore from '../../stores/ScreenStore';
 
 const Sprite = PIXI.Sprite;
 
-const panelIMG = '../img/panel.png';
-const plyBtnIMG = '../img/playBtn.png';
+const panelIMG = 'panel';
+const plyBtnIMG = 'playBtn';
 import {
 	config
 }
@@ -19,8 +19,8 @@ export default class HomeScene extends Sprite {
 	}
 
 	renderUI() {
-		this.panel = new Sprite.fromImage(panelIMG);
-		this.playButton = new Sprite.fromImage(plyBtnIMG);
+		this.panel = new Sprite.fromImage(PIXI.loader.resources[panelIMG].url);
+		this.playButton = new Sprite.fromImage(PIXI.loader.resources[plyBtnIMG].url);
 
 		this.addChild(this.panel);
 		this.addChild(this.playButton);

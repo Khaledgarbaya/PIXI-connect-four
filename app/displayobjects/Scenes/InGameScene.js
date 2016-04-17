@@ -1,9 +1,9 @@
 import PIXI from 'pixi.js';
 
-const greenIMG = '../img/green.png';
-const redIMG = '../img/red.png';
-const yellowIMG = '../img/yellow.png';
-const emptyIMG = '../img/empty.png';
+const greenIMG = 'green';
+const redIMG = 'red';
+const yellowIMG = 'yellow';
+const emptyIMG = 'empty';
 import {
 	BOARD_PADDING, BOARD_SIZE, FINISH_SIZE, PIECE_SIZE
 }
@@ -78,7 +78,7 @@ export default class InGameScene extends Sprite {
 		}
 
 		/* eslint-disable new-cap  */
-		return new Texture.fromImage(img);
+		return new Texture.fromImage(PIXI.loader.resources[img].url);
 	}
 
 	playWithYellow(board) {
@@ -154,10 +154,12 @@ export default class InGameScene extends Sprite {
 		this.reset();
 	}
 	reset() {
-		AnimationStore.removeListener("PLAY", this.onAnimationChangeHandler);
-
+		// console.log(EventEmitter.listenerCount(AnimationStore, 'PLAY'));
+		// AnimationStore.removeListener("PLAY", this.onAnimationChangeHandler.bind(this));
+		// console.log(EventEmitter.listenerCount(AnimationStore, 'PLAY'));
 		setTimeout(() => {
-			GameStateStore.set("type", RED_TURN);
+			//GameStateStore.set("type", RED_TURN);
+			this.renderPIXIBoard();
 			GameStore.emitChange();
 		}, 500);
 	}

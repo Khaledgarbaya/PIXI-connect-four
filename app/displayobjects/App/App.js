@@ -6,6 +6,8 @@ import GameStore from '../../stores/GameStore';
 import ScreenStore from '../../stores/ScreenStore';
 import RendererStore from '../../stores/RendererStore';
 
+import Assets from '../../model/Assets';
+
 /**
  * Main App Display Object
  *
@@ -25,8 +27,10 @@ export default class App extends PIXI.Container {
     ScreenStore.addChangeListener(this.ChangeScreenHandler.bind(this));
   }
   preloadAssets() {
-    let loader = new PIXI.loaders.Loader();
-    assets.forEach(item => loader.add(item, item));
+    let loader = PIXI.loader;
+    
+    Assets.assetList.forEach(item => loader.add(item.name, item.fullPath));
+    
     loader.once("complete", this.onAssetsLoaded.bind(this));
     loader.load();
   }
