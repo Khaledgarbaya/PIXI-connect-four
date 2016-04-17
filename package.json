@@ -1,7 +1,7 @@
 {
   "name": "connect-four-challenge",
-  "version": "0.6.1",
-  "repository": "",
+  "version": "0.7.0",
+  "author": "Khaled Garbaya <kgarbaya@gmail.com>",
   "description": "Connect four Game Using PIXI js and webpack",
   "config": {
     "buildDir": "./build",
@@ -10,7 +10,7 @@
     "BackgroundColor": "0x0083cd",
     "texts": {
       "panel_title": "CONNECT 4",
-      "result_text": "{playerName} Win...",
+      "result_text": "{playerName} Won...",
       "panel_desc": "Use your mouse to put red pieces into the board.\nYour goal is to get four of them in a row \nvertically, horizontally or diagonally.",
       "playBtn": "Let's Go"
     }
