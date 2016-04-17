@@ -3,7 +3,9 @@
 ## Intorduction
 
 Some assets are used downloaded from this link http://graphicburger.com/mobile-game-gui/
-Use for business may require a license
+Use for business may require a license.
+
+This project startes PIXI js bilerplate https://github.com/edwinwebb/pixi-seed for easy setup
 
 ## Getting started
 

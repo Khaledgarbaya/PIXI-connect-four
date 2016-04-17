@@ -1,8 +1,8 @@
 {
-  "name": "pixi-seed",
-  "version": "0.2.1",
-  "repository": "https://github.com/edwinwebb/pixi-seed",
-  "description": "Pixi.js project seed / boiler-plate with ES6 and Webpack",
+  "name": "connect-four-challenge",
+  "version": "0.6.1",
+  "repository": "",
+  "description": "Connect four Game Using PIXI js and webpack",
   "config": {
     "buildDir": "./build",
     "stageWidth": 1024,
