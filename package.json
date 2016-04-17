@@ -9,6 +9,7 @@
     "stageHeight": 768,
     "BackgroundColor" : "0x0083cd",
     "texts":{"panel_title":"CONNECT 4",
+            "result_text":"{playerName} Win",
               "panel_desc":"Use your mouse to put red pieces into the board.\nYour goal is to get four of them in a row \nvertically, horizontally or diagonally.",
             "playBtn":"Let's Go"}
   },

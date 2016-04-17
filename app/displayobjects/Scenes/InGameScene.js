@@ -1,4 +1,8 @@
 import PIXI from 'pixi.js';
+import {
+	config
+}
+from '../../../package.json';
 
 const greenIMG = 'green';
 const redIMG = 'red';
@@ -140,14 +144,14 @@ export default class InGameScene extends Sprite {
 		if (animPosition > pieceSprite.movingDirection.to.y) {
 			delete pieceSprite.movingDirection;
 			this.board.isAnimating = false;
-			// allow next player to play
-			playingNow = playingNow === RED_TURN ? YELLOW_TURN : RED_TURN;
-			GameStateStore.set("type", playingNow);
 
 			if (this.board.gameHasFinished(animatedPiece.value)) {
 				this.renderNewGame(this.board);
 				return;
 			}
+			// allow next player to play
+			playingNow = playingNow === RED_TURN ? YELLOW_TURN : RED_TURN;
+			GameStateStore.set("type", playingNow);
 
 
 			if (playingNow === YELLOW_TURN && !this.board.result) {
@@ -162,6 +166,23 @@ export default class InGameScene extends Sprite {
 		animPosition += animOffset;
 	}
 	renderNewGame(board) {
+		const playingNow = GameStateStore.get('type');
+		let playerNameValue = 'You';
+		if(playingNow !== RED_TURN){
+			playerNameValue = 'Enemy';
+		}
+
+		const text = config.texts.result_text.replace("{playerName}", playerNameValue);
+		const resultText = new PIXI.Text(text, {
+			font: 'bold 62px Arial',
+			fill: 0xffffff,
+			align: 'center',
+			dropShadow: true,
+			dropShadowDistance: 3
+		});
+		resultText.x = this.parent.width/2 - resultText.width/2; 
+		resultText.y = this.parent.height/2 - resultText.height/2; 
+		this.addChild(resultText);
 		this.reset();
 	}
 	reset() {
@@ -169,7 +190,7 @@ export default class InGameScene extends Sprite {
 			GameStateStore.removeListener(PLAY, this.boundGameStateListener);
 			AnimationStore.removeListener(ANIMATE, this.boundAnimationListener);
 			GameStore.emitChange();
-		}, 500);
+		}, 1000);
 	}
 	renderPIXIBoardBackground(board) {
 		for (let row = 0; row < BOARD_SIZE; row++) {
