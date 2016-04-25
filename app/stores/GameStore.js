@@ -15,7 +15,7 @@ class GameStore extends EventEmitter {
   }
 
   set (key, value) {
-    return this.data[key] = value;
+    return (this.data[key] = value);
   }
 
   emitChange () {

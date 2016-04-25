@@ -15,11 +15,11 @@ describe('Board', () => {
       expect(board).to.have.property('result');
       expect(board).to.have.property('animatedPiece');
       expect(board).to.have.property('isAnimating');
-      expect(Object.keys(board.pieces)).to.have.length(BOARD_SIZE * BOARD_SIZE)
+      expect(Object.keys(board.pieces)).to.have.length(BOARD_SIZE * BOARD_SIZE);
       expect(board.result).to.be.equal(null);
       expect(board.animatedPiece).to.be.equal(null);
       expect(board.isAnimating).to.be.equal(false);
-    })
+    });
   });
 
   describe('playAtColWithValue', () => {

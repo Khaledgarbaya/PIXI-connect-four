@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 export const NEW_GAME = 'NEW_GAME';
 export const PLAY_WITH_RED = 'PLAY_WITH_RED';
 export const PLAY_WITH_YELLOW = 'PLAY_WITH_YELLOW';
