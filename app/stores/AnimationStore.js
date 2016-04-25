@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import EventEmitter from 'events';
 import {
   ANIMATE

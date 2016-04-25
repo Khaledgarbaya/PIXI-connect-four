@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import {
   RESIZE, BOARD_PADDING, BOARD_SIZE, FINISH_SIZE, PIECE_SIZE
 }

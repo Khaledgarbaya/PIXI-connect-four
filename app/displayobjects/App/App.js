@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import PIXI from 'pixi.js';
 import InGameScene from '../Scenes/InGameScene.js';
 import HomeScene from '../Scenes/HomeScene.js';

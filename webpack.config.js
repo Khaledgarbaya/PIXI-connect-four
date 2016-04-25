@@ -1,5 +1,5 @@
 var path = require('path');
-var pkg = require('./package.json')
+var pkg = require('./package.json');
 var DEBUG = process.env.NODE_ENV !== 'production';
 var util = require('util');
 var entry = {

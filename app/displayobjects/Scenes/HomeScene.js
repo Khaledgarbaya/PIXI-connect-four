@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import PIXI from 'pixi.js';
 import InGameScene from './InGameScene.js';
 import Board from '../../model/Board.js';

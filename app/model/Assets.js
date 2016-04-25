@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import greenIMG from '../img/green.png';
 import emptyIMG from '../img/empty.png';
 import panelIMG from '../img/panel.png';

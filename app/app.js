@@ -5,6 +5,7 @@
  * and starts a render and animation loop
  *
  */
+/*jshint esversion: 6 */
 
 import './index.html';
 import {

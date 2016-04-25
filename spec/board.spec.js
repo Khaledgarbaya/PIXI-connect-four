@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import { expect } from 'chai';
 
 import { RED_TURN, YELLOW_TURN } from '../app/constants/GameConstants';
