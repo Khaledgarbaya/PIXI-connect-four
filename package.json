@@ -28,7 +28,7 @@
     "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
-    "pixi.js": "^3.0.7",
+    "pixi.js": "^5.0.0",
     "tween.js": "^16.3.4",
     "snyk": "^1.26.0"
   },
